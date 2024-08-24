@@ -24,22 +24,30 @@ namespace TicTacToeFascade.Models
             ResultAnalyzer = new ResultAnalyzer(board);
         }
 
+
+        //main method to play the game
         public void PlayGame()
         {
-            Menu.DisplayWelcomeMessage(Player1, Player2);
             while (ResultAnalyzer.AnalyzeResult() == ResultType.PROGRESS && !Board.IsBoardFull())
             {
+                Console.Clear();
+                Menu.DisplayWelcomeMessage(Player1, Player2);
                 Console.WriteLine($"Current Player: {CurrentPlayer.Name} with mark {CurrentPlayer.Mark}");
+
+                //print the current state of the board
+                Board.PrintBoard();
                 int choice = Menu.GetPlayerChoice();
 
                 try
                 {
-                    //try to mark the current cell
+                    //try to mark the current cell with the current player's mark
                     Board.SetCellMark(choice, CurrentPlayer.Mark);
                 }
                 catch (CellAlreadyMarkedException ex)
                 {
                     Console.WriteLine(ex.Message);
+                    Console.WriteLine("Press any key to try again...");
+                    Console.ReadKey();
                     continue;
                 }
                 catch (CellNotFoundException ex)
@@ -53,22 +61,30 @@ namespace TicTacToeFascade.Models
                     continue;
                 }
 
-                // Check if the current move won the game
+
+
+                //check if the current move won the game
                 if (ResultAnalyzer.AnalyzeResult() == ResultType.WIN)
                 {
+                    Console.Clear();
+                    Menu.DisplayWelcomeMessage(Player1, Player2);
+                    Board.PrintBoard();
                     Console.WriteLine("╔═══════════════════════════════╗");
-                    Console.WriteLine($"║         {CurrentPlayer.Name} wins!        ║");
+                    Console.WriteLine($"║         {CurrentPlayer.Name} wins!          ║");
                     Console.WriteLine("╚═══════════════════════════════╝");
                     return;
                 }
 
-                // Switch to the other player for the next turn
+                //switch to the other player for the next turn
                 CurrentPlayer = CurrentPlayer == Player1 ? Player2 : Player1;
             }
 
-            // If the board is full and no one has won, it's a draw
+            //if the board is full and no one has won, it's a draw
             if (Board.IsBoardFull())
             {
+                Console.Clear();
+                Menu.DisplayWelcomeMessage(Player1, Player2);
+                Board.PrintBoard();
                 Console.WriteLine("╔═══════════════════════════════╗");
                 Console.WriteLine("║          It's a draw!         ║");
                 Console.WriteLine("╚═══════════════════════════════╝");

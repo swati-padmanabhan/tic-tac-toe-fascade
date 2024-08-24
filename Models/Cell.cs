@@ -33,5 +33,12 @@ namespace TicTacToeFascade.Models
         }
 
 
+        //gets the current mark of the cell
+        public MarkType GetMark()
+        {
+            return Mark;
+        }
+
+
     }
 }

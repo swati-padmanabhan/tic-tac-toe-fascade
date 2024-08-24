@@ -46,8 +46,39 @@ namespace TicTacToeFascade.Models
         //marks a cell at a specific location on the board
         public void SetCellMark(int loc, MarkType mark)
         {
+
+            //ensure the location is valid before attempting to mark.
+            if (loc < 0 || loc >= cells.Length)
+            {
+                throw new CellNotFoundException("Invalid cell index. Please provide a valid index between 0 and 8.");
+            }
             cells[loc].SetMark(mark);
         }
 
+        //prints the board 
+        public void PrintBoard()
+        {
+            for (int i = 0; i < cells.Length; i++)
+            {
+
+                //print the mark in the cell, or a space if it is empty
+                Console.Write(cells[i].GetMark() == MarkType.EMPTY ? " " : cells[i].GetMark().ToString());
+
+
+                //print vertical dividers between cells, but not after the last cell in a row
+                if ((i + 1) % 3 != 0)
+                {
+                    Console.Write(" | ");
+                }
+
+                //print horizontal divider after each row, except the last row
+                if ((i + 1) % 3 == 0 && i < cells.Length - 1)
+                {
+                    Console.WriteLine("\n---------");
+                }
+            }
+
+            Console.WriteLine();
+        }
     }
 }
